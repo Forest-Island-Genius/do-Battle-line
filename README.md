@@ -1,16 +1,25 @@
-# React + Vite
+# Battle Line Online (バトルライン オンライン)
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+プレミアムな美しさと数学的な確定証明ロジックを備えた、対戦型カードゲーム『バトルライン』のWEB版です。
 
-Currently, two official plugins are available:
+![Game Preview](https://via.placeholder.com/800x450?text=Battle+Line+Online)
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## ✨ 特徴
+- **リアルタイム通信対戦**: Firebase を利用し、世界中のプレイヤーと対戦可能。
+- **フル日本語化 & プレミアムデザイン**: ダークモードを基調とした、視認性の高いモダンなUI。
+- **高度な自動獲得ロジック**: 場に出ているカードから「数学的に勝利が確定」した時点で、自動的にフラッグを獲得。
+- **自動視点切り替え**: P1、P2どちら側で参加しても、常に自分の手札が手前（下側）に表示されます。
+- **無料デプロイ対応**: Vercel と Firebase の無料枠で運用可能。
 
-## React Compiler
+## 🚀 デプロイ方法
+1. GitHub リポジトリを作成し、このコードをプッシュします。
+2. Vercel を GitHub リポジトリと連携させます。
+3. `firebaseConfig` を環境変数として Vercel に登録します。
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## 🛠 テクノロジー
+- **Frontend**: React, Vite, CSS Modules
+- **Backend**: Firebase Realtime Database
+- **Utilities**: nanoid, Lucide Icons
 
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## ⚖️ ライセンス
+MIT License
