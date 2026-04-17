@@ -1,0 +1,90 @@
+/* Card.css */
+.card {
+    width: 60px;
+    height: 90px;
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 0.4rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3), inset 0 1px 1px rgba(255,255,255,0.2);
+    color: white;
+    font-weight: 800;
+    cursor: pointer;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    user-select: none;
+}
+
+.card:hover:not(.face-down) {
+    transform: translateY(-4px) scale(1.05);
+    box-shadow: 0 10px 15px rgba(0, 0, 0, 0.4), 0 0 15px rgba(255,255,255,0.1);
+}
+
+.card.selected {
+    transform: translateY(-10px) scale(1.1);
+    box-shadow: 0 0 20px var(--accent-color), inset 0 1px 1px rgba(255,255,255,0.4);
+    border: 2px solid white;
+}
+
+/* Colors */
+.card.red { background: var(--card-red); }
+.card.blue { background: var(--card-blue); }
+.card.green { background: var(--card-green); }
+.card.yellow { background: var(--card-yellow); }
+.card.purple { background: var(--card-purple); }
+.card.orange { background: var(--card-orange); }
+.card.neutral { background: var(--card-neutral); }
+.card.tactical { background: var(--card-tactical); border: 1px solid #94a3b8; }
+
+.face-down {
+    background: repeating-linear-gradient(
+        45deg,
+        #1e293b,
+        #1e293b 10px,
+        #0f172a 10px,
+        #0f172a 20px
+    );
+    border: 1px solid var(--surface-border);
+    cursor: default;
+}
+.face-down:hover {
+    transform: none;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+}
+
+.card-top {
+    text-align: left;
+    font-size: 1rem;
+    line-height: 1;
+}
+
+.card-center {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.troop-icon {
+    font-size: 1.5rem;
+    opacity: 0.7;
+}
+
+.tactical-name {
+    font-size: 0.65rem;
+    text-align: center;
+    word-break: break-word;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    background: rgba(0,0,0,0.5);
+    padding: 2px 4px;
+    border-radius: 4px;
+}
+
+.card-bottom {
+    text-align: right;
+    font-size: 1rem;
+    line-height: 1;
+    transform: rotate(180deg);
+}

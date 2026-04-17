@@ -1,0 +1,55 @@
+/* Hand.css */
+.hand-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+}
+
+.player-label {
+    margin: 0 0 0.5rem 0;
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+
+.active-turn .player-label {
+    color: var(--text-primary);
+    text-shadow: 0 0 10px rgba(255,255,255,0.3);
+}
+
+.cards-row {
+    display: flex;
+    gap: -20px; /* Overlap cards slightly */
+    justify-content: center;
+    padding: 10px;
+}
+
+.hand-card-wrapper {
+    margin-left: -15px;
+    transition: transform 0.2s;
+}
+
+.hand-card-wrapper:first-child {
+    margin-left: 0;
+}
+
+/* Fan out effect slightly */
+.hand-card-wrapper:nth-child(1) { transform: rotate(-6deg) translateY(4px); }
+.hand-card-wrapper:nth-child(2) { transform: rotate(-4deg) translateY(2px); }
+.hand-card-wrapper:nth-child(3) { transform: rotate(-2deg); }
+.hand-card-wrapper:nth-child(4) { transform: rotate(0deg) translateY(-2px); z-index: 10; }
+.hand-card-wrapper:nth-child(5) { transform: rotate(2deg); }
+.hand-card-wrapper:nth-child(6) { transform: rotate(4deg) translateY(2px); }
+.hand-card-wrapper:nth-child(7) { transform: rotate(6deg) translateY(4px); }
+
+.hand-card-wrapper:hover {
+    transform: translateY(-15px) rotate(0) scale(1.1);
+    z-index: 20;
+}
+
+.hand-card-wrapper.selected {
+    transform: translateY(-20px) rotate(0) scale(1.15);
+    z-index: 30;
+}

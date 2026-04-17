@@ -1,0 +1,24 @@
+/* Board.css */
+.board-container {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    /* subtle background grid for the battlefield */
+    background-image: linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+    background-size: 50px 50px;
+    border-radius: 20px;
+    box-shadow: inset 0 0 50px rgba(0,0,0,0.5);
+    margin: 1rem 0;
+    padding: 1rem;
+}
+
+.flags-row {
+    display: flex;
+    justify-content: center;
+    gap: 1.5rem;
+    height: 100%;
+    align-items: center;
+}
