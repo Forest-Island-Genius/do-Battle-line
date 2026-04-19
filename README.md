@@ -23,16 +23,23 @@ npm run build      # 本番ビルド
 
 オンライン対戦には Firebase が必要です。`.env.example` を `.env.local` にコピーし、Realtime Database の資格情報を入れてください。
 
-## 🎨 ビジュアルの差し替え (Nano Banana)
+## 🎨 ビジュアル生成 (Gemini / Nano Banana)
 
-ロビーのヒーロー画像を AI 生成で差し替えたい場合:
+ロビーのヒーロー画像、羊皮紙テクスチャ、ワードマークを AI で生成 / 差し替え:
 
 ```bash
-export FAL_KEY=your_fal_api_key
+# 1. https://aistudio.google.com/apikey から Gemini API キーを取得
+export GEMINI_API_KEY=your_key
+
+# 2. 全部まとめて生成 (hero / parchment / wordmark)
 npm run gen:hero
+
+# 3. 個別生成
+npm run gen:hero hero
+npm run gen:hero parchment
 ```
 
-`scripts/gen-hero.mjs` が fal.ai の Nano Banana を叩いて `src/assets/hero.png` を上書きします。
+`scripts/gen-hero.mjs` が Google 公式 `@google/genai` SDK で `gemini-2.5-flash-image` (通称 Nano Banana) を直接叩いて `src/assets/` に PNG を出力します。MCP 不要・ゼロ中間レイヤー・**本番アプリやサーバ関数からもそのまま同じ SDK を流用可能**です。
 
 ## 🛠 技術スタック
 
