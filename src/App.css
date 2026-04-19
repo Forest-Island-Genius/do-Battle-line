@@ -674,6 +674,22 @@
     }
 }
 
+/* Scout 引いたカードのプレビュー */
+.scout-picked-preview {
+    display: flex;
+    gap: 0.4rem;
+    justify-content: center;
+    margin: 0.5rem 0 0.75rem;
+    flex-wrap: wrap;
+}
+.scout-help {
+    font-size: 0.7rem;
+    color: var(--text-secondary, #94a3b8);
+    text-align: center;
+    letter-spacing: 1px;
+    margin-bottom: 0.5rem;
+}
+
 /* 一時エラートースト */
 .play-error-toast {
     position: fixed;

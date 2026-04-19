@@ -1,45 +1,39 @@
-// constants for the game
+// Nine Banners — カードデッキと戦術定義
 export const COLORS = ['red', 'blue', 'green', 'yellow', 'purple', 'orange'];
 export const MIN_VALUE = 1;
 export const MAX_VALUE = 10;
 
 export const TACTICAL_TYPES = {
     WEATHER: 'WEATHER',
-    MORALE: 'MORALE', // Or Environment
-    GUILE: 'GUILE'    // Or Ploy/Stratagem
+    MORALE: 'MORALE',
+    GUILE: 'GUILE'
 };
 
+// ID (t_xxx) は内部ロジック用に固定。表示名は Nine Banners 仕様にリネーム。
+// leader: Alexander/Darius 相当は 1 プレイヤーあたり生涯 1 枚制限。
 export const TACTICAL_CARDS = [
-    { id: 't_fog', name: 'Fog', nameJa: '霧', type: TACTICAL_TYPES.WEATHER,
-      description: 'Disables formations on a flag. Winners are decided by sum of values.',
+    { id: 't_fog', name: 'Mist of War', nameJa: '戦場の霧', type: TACTICAL_TYPES.WEATHER,
       descriptionJa: 'フラッグの役を無効化し、合計値のみで勝敗を決する。' },
-    { id: 't_mud', name: 'Mud', nameJa: '泥濘', type: TACTICAL_TYPES.WEATHER,
-      description: 'Expands the formation size on a flag to 4 cards.',
-      descriptionJa: 'フラッグの必要編成枚数を4枚に拡張する。' },
-    { id: 't_alexander', name: 'Alexander', nameJa: 'アレクサンドロス', type: TACTICAL_TYPES.MORALE,
-      description: 'Acts as a wild card (any color, any number).',
-      descriptionJa: '任意の色・任意の値として扱えるワイルドカード。' },
-    { id: 't_darius', name: 'Darius', nameJa: 'ダレイオス', type: TACTICAL_TYPES.MORALE,
-      description: 'Acts as a wild card (any color, any number).',
-      descriptionJa: '任意の色・任意の値として扱えるワイルドカード。' },
-    { id: 't_shield', name: 'Shield', nameJa: '盾兵', type: TACTICAL_TYPES.MORALE,
-      description: 'Acts as a wild card of value 1, 2, or 3 (any color).',
-      descriptionJa: '任意の色で値は 1・2・3 のいずれかのワイルドカード。' },
-    { id: 't_companion', name: 'Companion Cavalry', nameJa: '仲間騎兵', type: TACTICAL_TYPES.MORALE,
-      description: 'Acts as an 8 of any color.',
-      descriptionJa: '任意の色の 8 として扱えるワイルドカード。' },
-    { id: 't_scout', name: 'Scout', nameJa: '斥候', type: TACTICAL_TYPES.GUILE,
-      description: 'Draw 3 cards from either deck, then return 2 cards to the top of their decks.',
-      descriptionJa: '任意の山札から合計3枚引き、そのうち2枚を山札の上に戻す。(未実装)' },
-    { id: 't_redeploy', name: 'Redeploy', nameJa: '再配置', type: TACTICAL_TYPES.GUILE,
-      description: 'Move one of your troops to another flag or discard it.',
-      descriptionJa: '自軍の部隊1枚を別のフラッグへ移動、または捨て札にする。(未実装)' },
-    { id: 't_deserter', name: 'Deserter', nameJa: '脱走兵', type: TACTICAL_TYPES.GUILE,
-      description: 'Discard one opposing troop card.',
-      descriptionJa: '相手の部隊カード1枚を捨て札にする。(未実装)' },
-    { id: 't_traitor', name: 'Traitor', nameJa: '裏切り者', type: TACTICAL_TYPES.GUILE,
-      description: 'Move one opposing troop card to your side.',
-      descriptionJa: '相手の部隊カード1枚を自軍側へ移動する。(未実装)' },
+    { id: 't_mud', name: 'Quagmire', nameJa: '泥濘', type: TACTICAL_TYPES.WEATHER,
+      descriptionJa: 'フラッグの必要編成枚数を 4 枚に拡張する。' },
+
+    { id: 't_alexander', name: 'Lion Banner', nameJa: '獅子旗', type: TACTICAL_TYPES.MORALE, leader: true,
+      descriptionJa: '任意の色・任意の値のワイルド。獅子旗と鷲旗は合わせて生涯 1 枚のみ使用可。' },
+    { id: 't_darius', name: 'Eagle Banner', nameJa: '鷲旗', type: TACTICAL_TYPES.MORALE, leader: true,
+      descriptionJa: '任意の色・任意の値のワイルド。獅子旗と鷲旗は合わせて生涯 1 枚のみ使用可。' },
+    { id: 't_shield', name: 'Shield Wall', nameJa: '盾衛', type: TACTICAL_TYPES.MORALE,
+      descriptionJa: '任意の色で値は 1・2・3 のいずれかのワイルド。' },
+    { id: 't_companion', name: 'Royal Guard', nameJa: '近衛騎兵', type: TACTICAL_TYPES.MORALE,
+      descriptionJa: '任意の色の 8 として扱えるワイルド。' },
+
+    { id: 't_scout', name: 'Outrider', nameJa: '斥候', type: TACTICAL_TYPES.GUILE,
+      descriptionJa: '山札から任意の組合せで合計 3 枚を引き、手札から 2 枚を各山札の上に戻す。ドローは発生しない。' },
+    { id: 't_redeploy', name: 'Reposition', nameJa: '陣変え', type: TACTICAL_TYPES.GUILE,
+      descriptionJa: '自軍の未獲得フラッグ上のカード 1 枚を別の未獲得フラッグへ移動、もしくは捨て札にする。' },
+    { id: 't_deserter', name: 'Desertion', nameJa: '脱走', type: TACTICAL_TYPES.GUILE,
+      descriptionJa: '敵軍の未獲得フラッグ上のカード 1 枚を捨て札にする。' },
+    { id: 't_traitor', name: 'Turncoat', nameJa: '裏切り', type: TACTICAL_TYPES.GUILE,
+      descriptionJa: '敵軍の未獲得フラッグ上の部隊カード 1 枚を自軍側の未獲得フラッグへ寝返らせる。' },
 ];
 
 export function createTroopDeck() {
@@ -49,7 +43,7 @@ export function createTroopDeck() {
             deck.push({
                 type: 'TROOP',
                 id: `troop_${color}_${i}`,
-                color: color,
+                color,
                 value: i
             });
         }
@@ -58,15 +52,10 @@ export function createTroopDeck() {
 }
 
 export function createTacticalDeck() {
-    // MVP: Weather と Morale のみ採用。Guile (Scout/Redeploy/Deserter/Traitor) は
-    // マルチステップの対象選択 UI が未実装のため一旦デッキから除外する。
-    let deck = TACTICAL_CARDS
-        .filter(card => card.type !== TACTICAL_TYPES.GUILE)
-        .map(card => ({ ...card, isTactical: true }));
-    return shuffle(deck);
+    // Guile カードも含め全 10 種を採用。
+    return shuffle(TACTICAL_CARDS.map(card => ({ ...card, isTactical: true })));
 }
 
-// Fisher-Yates shuffle
 export function shuffle(array) {
     let currentIndex = array.length, randomIndex;
     let newArray = [...array];

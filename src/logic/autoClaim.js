@@ -1,29 +1,20 @@
-import { evaluateCards } from './evaluation';
+import { evaluateCards, resolveFullFlag } from './evaluation';
 import { COLORS, MIN_VALUE, MAX_VALUE } from './deck';
 
-/**
- * Returns array of all troop cards that are publicly visible on any flag.
- * This ensures we ONLY use board-level public information.
- */
 function getVisibleCardsOnBoard(flags) {
-    let visible = [];
+    const visible = [];
     flags.forEach(f => {
-        f.p1Cards.forEach(c => { if(c.type === 'TROOP') visible.push(c); });
-        f.p2Cards.forEach(c => { if(c.type === 'TROOP') visible.push(c); });
+        f.p1Cards.forEach(c => { if (c.type === 'TROOP') visible.push(c); });
+        f.p2Cards.forEach(c => { if (c.type === 'TROOP') visible.push(c); });
     });
     return visible;
 }
 
-/**
- * Generates all troop cards that are NOT visible on the board.
- * These are the cards that "could" still be in hands or in the deck.
- */
-function getRemainingTroopPool(visibleCards) {
-    let remaining = [];
+function getRemainingTroopPool(visible) {
+    const remaining = [];
     for (const color of COLORS) {
         for (let v = MIN_VALUE; v <= MAX_VALUE; v++) {
-            let isVisible = visibleCards.some(c => c.color === color && c.value === v);
-            if (!isVisible) {
+            if (!visible.some(c => c.color === color && c.value === v)) {
                 remaining.push({ color, value: v, type: 'TROOP', isTactical: false, id: `troop_${color}_${v}` });
             }
         }
@@ -31,117 +22,82 @@ function getRemainingTroopPool(visibleCards) {
     return remaining;
 }
 
-/**
- * Simple combination generator.
- */
-function getCombinations(arr, k) {
+function combinations(arr, k) {
     if (k === 0) return [[]];
-    let result = [];
-    function backtrack(start, combo) {
-        if (combo.length === k) {
-            result.push([...combo]);
-            return;
-        }
+    const result = [];
+    (function backtrack(start, combo) {
+        if (combo.length === k) { result.push([...combo]); return; }
         for (let i = start; i < arr.length; i++) {
-            combo.push(arr[i]);
-            backtrack(i + 1, combo);
-            combo.pop();
+            combo.push(arr[i]); backtrack(i + 1, combo); combo.pop();
         }
-    }
-    backtrack(0, []);
+    })(0, []);
     return result;
 }
 
-/**
- * Calculates the absolute best possible formation a side could make given their current cards 
- * and the remaining deck pool (publicly unknown cards).
- */
-function getBestPossibleEvaluation(currentCards, remainingPool, requiredSize = 3) {
-    let needed = requiredSize - currentCards.length;
-    let isMud = requiredSize === 4;
-    if (needed === 0) return evaluateCards(currentCards, isMud);
+function bestPossibleEvaluation(currentCards, pool, requiredSize) {
+    const isMud = requiredSize === 4;
+    const needed = requiredSize - currentCards.length;
+    if (needed === 0) return evaluateCards(currentCards, isMud) || { rank: 0, sum: 0 };
     if (needed < 0) return { rank: 0, sum: 0 };
 
-    let bestEval = { rank: 0, sum: 0 };
-    let possibleCompletions = getCombinations(remainingPool, needed);
-
-    for (let extraCards of possibleCompletions) {
-        let testHand = [...currentCards, ...extraCards];
-        let currentEval = evaluateCards(testHand, isMud);
-        if (!currentEval) continue;
-        if (currentEval.rank > bestEval.rank || (currentEval.rank === bestEval.rank && currentEval.sum > bestEval.sum)) {
-            bestEval = currentEval;
-        }
+    let best = { rank: 0, sum: 0 };
+    for (const extra of combinations(pool, needed)) {
+        const ev = evaluateCards([...currentCards, ...extra], isMud);
+        if (!ev) continue;
+        if (ev.rank > best.rank || (ev.rank === best.rank && ev.sum > best.sum)) best = ev;
     }
-    return bestEval;
+    return best;
 }
 
 /**
- * Evaluates a single flag to see if someone has mathematically claimed it.
- * Strictly uses board-public troop information only.
+ * フラッグが数学的に獲得可能か判定する。
+ * - 両者フル: resolveFullFlag でタイブレーク (firstCompletedBy) 込みで解決
+ * - 片側フル: 未知カードプール全探索で「相手が到達可能な最高形」を上回るなら獲得
  */
 export function checkAutoClaimForFlag(flag, allFlags) {
     if (flag.claimedBy) return flag.claimedBy;
 
     const requiredSize = flag.weatherCard === 't_mud' ? 4 : 3;
     const isFog = flag.weatherCard === 't_fog';
-    
+
     const p1Full = flag.p1Cards.length === requiredSize;
     const p2Full = flag.p2Cards.length === requiredSize;
 
-    const isMud = flag.weatherCard === 't_mud';
+    if (p1Full && p2Full) return resolveFullFlag(flag);
+    if (!p1Full && !p2Full) return null;
 
-    // Both full: immediate evaluation
-    if (p1Full && p2Full) {
-        const p1Eval = evaluateCards(flag.p1Cards, isMud);
-        const p2Eval = evaluateCards(flag.p2Cards, isMud);
-        
+    const unknownPool = getRemainingTroopPool(getVisibleCardsOnBoard(allFlags));
+
+    if (p1Full) {
+        const p1Ev = evaluateCards(flag.p1Cards, requiredSize === 4);
+        const p2Best = bestPossibleEvaluation(flag.p2Cards, unknownPool, requiredSize);
         if (isFog) {
-            if (p1Eval.sum > p2Eval.sum) return 'P1';
-            if (p2Eval.sum > p1Eval.sum) return 'P2';
-            return null; // Tie handling (in Battle Line, first to complete usually wins ties)
+            // P1 sum > any reachable P2 sum
+            if (p1Ev.sum > p2Best.sum) return 'P1';
+            // ここで sum 同値 = P1 が先完成なので勝ち
+            if (p1Ev.sum === p2Best.sum && flag.firstCompletedBy === 'P1') return 'P1';
+            return null;
         }
-
-        if (p1Eval.rank > p2Eval.rank) return 'P1';
-        if (p2Eval.rank > p1Eval.rank) return 'P2';
-        if (p1Eval.sum > p2Eval.sum) return 'P1';
-        if (p2Eval.sum > p1Eval.sum) return 'P2';
+        if (p1Ev.rank > p2Best.rank) return 'P1';
+        if (p1Ev.rank === p2Best.rank) {
+            if (p1Ev.sum > p2Best.sum) return 'P1';
+            if (p1Ev.sum === p2Best.sum && flag.firstCompletedBy === 'P1') return 'P1';
+        }
         return null;
     }
 
-    // Proof of Winning: Only if at least one side is full
-    if (!p1Full && !p2Full) return null;
-
-    const visibleOnBoard = getVisibleCardsOnBoard(allFlags);
-    const unknownPool = getRemainingTroopPool(visibleOnBoard);
-
-    if (p1Full) {
-        const p1Eval = evaluateCards(flag.p1Cards, isMud);
-        // Can P2 ever beat this p1Eval given current board and unknown pool?
-        const bestP2Possible = getBestPossibleEvaluation(flag.p2Cards, unknownPool, requiredSize);
-        
-        if (isFog) {
-            if (p1Eval.sum >= bestP2Possible.sum) return 'P1'; // Wins on sum or tie (completed first)
-            return null;
-        }
-        
-        if (p1Eval.rank > bestP2Possible.rank) return 'P1';
-        if (p1Eval.rank === bestP2Possible.rank && p1Eval.sum >= bestP2Possible.sum) return 'P1';
-    } 
-    
-    if (p2Full) {
-        const p2Eval = evaluateCards(flag.p2Cards, isMud);
-        // Can P1 ever beat this p2Eval?
-        const bestP1Possible = getBestPossibleEvaluation(flag.p1Cards, unknownPool, requiredSize);
-        
-        if (isFog) {
-            if (p2Eval.sum >= bestP1Possible.sum) return 'P2';
-            return null;
-        }
-        
-        if (p2Eval.rank > bestP1Possible.rank) return 'P2';
-        if (p2Eval.rank === bestP1Possible.rank && p2Eval.sum >= bestP1Possible.sum) return 'P2';
+    // p2Full only
+    const p2Ev = evaluateCards(flag.p2Cards, requiredSize === 4);
+    const p1Best = bestPossibleEvaluation(flag.p1Cards, unknownPool, requiredSize);
+    if (isFog) {
+        if (p2Ev.sum > p1Best.sum) return 'P2';
+        if (p2Ev.sum === p1Best.sum && flag.firstCompletedBy === 'P2') return 'P2';
+        return null;
     }
-
+    if (p2Ev.rank > p1Best.rank) return 'P2';
+    if (p2Ev.rank === p1Best.rank) {
+        if (p2Ev.sum > p1Best.sum) return 'P2';
+        if (p2Ev.sum === p1Best.sum && flag.firstCompletedBy === 'P2') return 'P2';
+    }
     return null;
 }

@@ -127,9 +127,33 @@
     position: absolute;
     top: -25px;
     background: rgba(0,0,0,0.7);
-    color: white;
-    font-size: 0.6rem;
+    color: var(--gold-light, #f4d27a);
+    font-size: 0.65rem;
     padding: 2px 6px;
     border-radius: 4px;
-    letter-spacing: 1px;
+    letter-spacing: 2px;
+    font-family: 'Cinzel', Georgia, serif;
+    border: 1px solid var(--gold, #c99a3c);
+}
+
+/* Guile 目的地候補 */
+.flag-destination-hl {
+    background: rgba(211, 168, 74, 0.08);
+    outline: 1px dashed rgba(211, 168, 74, 0.5);
+    animation: destPulse 1.6s ease-in-out infinite;
+}
+@keyframes destPulse {
+    0%, 100% { outline-color: rgba(211, 168, 74, 0.35); }
+    50%      { outline-color: rgba(244, 210, 122, 0.85); }
+}
+
+/* Guile ターゲット可能カード */
+.slot-targetable {
+    cursor: crosshair;
+}
+.slot-targetable .card {
+    box-shadow: 0 0 0 2px var(--gold, #c99a3c), 0 0 18px rgba(244, 210, 122, 0.55);
+}
+.slot-targetable:hover .card {
+    transform: translateY(-4px) scale(1.08);
 }
