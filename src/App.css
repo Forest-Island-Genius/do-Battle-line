@@ -143,10 +143,14 @@
     pointer-events: auto;
 }
 
-/* 自分の待機中: 手札は常に見え、ポインターはON */
+/* 自分の待機中: 手札は常に見え、ホバーで効果確認も可能。
+   配置クリックは handleCardClick / handleFlagClick 側で JS ガードされる。 */
 .player-area.my-wait {
     opacity: 0.72;
-    pointer-events: none; /* 自分のターンでないので配置不可だが表示はする */
+    pointer-events: auto;
+}
+.player-area.my-wait .card {
+    cursor: help;
 }
 
 .top-player-area {
