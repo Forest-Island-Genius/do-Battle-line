@@ -13,13 +13,29 @@
 // Model: gemini-2.5-flash-image (a.k.a. "Nano Banana").
 
 import { GoogleGenAI } from '@google/genai';
-import { writeFile, mkdir } from 'node:fs/promises';
+import { writeFile, mkdir, readFile } from 'node:fs/promises';
+import { existsSync } from 'node:fs';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = resolve(__dirname, '..');
 const ASSETS_DIR = resolve(ROOT, 'src/assets');
+
+// .env.local / .env から GEMINI_API_KEY を読み込む (dotenv 依存なし)
+for (const fname of ['.env.local', '.env']) {
+    const fpath = resolve(ROOT, fname);
+    if (!existsSync(fpath)) continue;
+    const text = await readFile(fpath, 'utf8');
+    for (const line of text.split('\n')) {
+        const m = line.match(/^\s*([A-Z_][A-Z0-9_]*)\s*=\s*(.*?)\s*$/);
+        if (!m) continue;
+        const [, key, rawVal] = m;
+        if (process.env[key]) continue; // シェル env を優先
+        const val = rawVal.replace(/^["']|["']$/g, '');
+        process.env[key] = val;
+    }
+}
 
 const apiKey = process.env.GEMINI_API_KEY;
 if (!apiKey) {

@@ -88,3 +88,79 @@
     line-height: 1;
     transform: rotate(180deg);
 }
+
+/* 戦術カードのホバー説明 */
+.card-tooltip {
+    position: absolute;
+    bottom: calc(100% + 8px);
+    left: 50%;
+    transform: translateX(-50%);
+    min-width: 180px;
+    max-width: 240px;
+    padding: 0.6rem 0.75rem;
+    background: linear-gradient(180deg, rgba(10, 13, 31, 0.97), rgba(11, 18, 48, 0.97));
+    border: 1px solid var(--gold, #c99a3c);
+    border-radius: 6px;
+    box-shadow: 0 10px 24px rgba(0, 0, 0, 0.55);
+    color: var(--text-primary, #f5ecd4);
+    font-weight: 400;
+    font-size: 0.72rem;
+    line-height: 1.45;
+    letter-spacing: 0.2px;
+    text-align: left;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateX(-50%) translateY(4px);
+    transition: opacity 140ms ease, transform 140ms ease, visibility 0s linear 140ms;
+    pointer-events: none;
+    z-index: 9999;
+    white-space: normal;
+}
+
+.card-tooltip::after {
+    /* 下向きの三角 */
+    content: "";
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    border: 6px solid transparent;
+    border-top-color: var(--gold, #c99a3c);
+}
+
+.card:hover .card-tooltip {
+    opacity: 1;
+    visibility: visible;
+    transform: translateX(-50%) translateY(0);
+    transition: opacity 140ms ease, transform 140ms ease, visibility 0s;
+}
+
+.card-tooltip-title {
+    font-family: 'Cinzel', Georgia, serif;
+    font-weight: 700;
+    color: var(--gold-light, #f4d27a);
+    letter-spacing: 1.5px;
+    font-size: 0.78rem;
+    margin-bottom: 0.25rem;
+    text-transform: uppercase;
+}
+
+.card-tooltip-body {
+    color: #d9cfa9;
+}
+
+/* 盤面上の相手側(180度回転)カードではツールチップを反転して読めるように */
+.top-cards .card-tooltip {
+    transform: translateX(-50%) rotate(180deg);
+    bottom: auto;
+    top: calc(100% + 8px);
+}
+.top-cards .card:hover .card-tooltip {
+    transform: translateX(-50%) rotate(180deg) translateY(0);
+}
+.top-cards .card-tooltip::after {
+    top: auto;
+    bottom: 100%;
+    border-top-color: transparent;
+    border-bottom-color: var(--gold, #c99a3c);
+}
