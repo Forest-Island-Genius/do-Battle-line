@@ -6,6 +6,7 @@ import { getInitialGameState } from './logic/game';
 import { Board } from './components/Board';
 import { Hand } from './components/Hand';
 import { syncGameState, listenToGameState, createRoom } from './firebase';
+import emblemUrl from './assets/emblem.svg';
 import './App.css';
 
 // ---- 確認モーダル ----
@@ -89,11 +90,13 @@ function App() {
         return (
             <div className="lobby-container">
                 <div className="lobby-card">
-                    <h1>Battle Line Online</h1>
-                    <p className="lobby-subtitle">戦場を選択してください</p>
+                    <img src={emblemUrl} alt="" className="lobby-emblem" />
+                    <h1>Nine Banners</h1>
+                    <p className="lobby-subtitle">九旗の対戦</p>
+                    <span className="lobby-rule" aria-hidden="true" />
                     <div className="lobby-actions">
                         <button onClick={handleRoomCreate} className="lobby-btn create-btn">
-                            <span className="icon">⚔️</span> 新しい対戦を作成 (P1)
+                            軍旗を掲げる (P1)
                         </button>
                         <div className="divider"><span>または</span></div>
                         <form onSubmit={handleRoomJoin} className="join-room-form">
@@ -101,7 +104,7 @@ function App() {
                             <button type="submit" className="lobby-btn join-btn">参戦する (P2)</button>
                         </form>
                         <div className="firebase-hint">
-                            ※オンライン対戦にはFirebaseの設定が必要です (.env.exampleを参照)
+                            ※オンライン対戦には Firebase の設定が必要です (.env.example を参照)
                         </div>
                     </div>
                 </div>
@@ -251,7 +254,8 @@ function App() {
 
             <header className="game-header">
                 <div className="header-left">
-                    <h1>Battle Line</h1>
+                    <img src={emblemUrl} alt="" className="header-emblem" />
+                    <h1>Nine Banners</h1>
                     <div className="room-info">
                         ルームコード: <span className="room-code">{roomId}</span>
                         <span className="player-role-badge">{myRole}</span>
@@ -259,7 +263,7 @@ function App() {
                             className={`copy-invite-btn ${copyStatus}`}
                             onClick={handleCopyInvite}
                         >
-                            {copyStatus === 'invite' ? '🔗 招待リンクをコピー' : '✅ コピー完了！'}
+                            {copyStatus === 'invite' ? '招待リンクをコピー' : 'コピー完了'}
                         </button>
                     </div>
                 </div>
@@ -279,7 +283,7 @@ function App() {
                             <span className="winner-text">
                                 {activeState.status.replace('_WINS', ' の勝利！').replace('P1', 'プレイヤー1').replace('P2', 'プレイヤー2')}
                             </span>
-                            <button onClick={() => setSearchParams({})} className="re-lobby-btn">ロビーに戻る</button>
+                            <button onClick={() => setSearchParams({})} className="re-lobby-btn">陣を引く</button>
                         </div>
                     )}
                 </div>

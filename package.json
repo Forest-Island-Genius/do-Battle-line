@@ -1,13 +1,15 @@
 {
-  "name": "battleline-web",
+  "name": "nine-banners",
+  "description": "Nine Banners — online heraldic skirmish card game. 9 flags, poker-style formations, and a mathematical auto-claim engine.",
   "private": true,
-  "version": "0.0.0",
+  "version": "0.1.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "gen:hero": "node scripts/gen-hero.mjs"
   },
   "dependencies": {
     "firebase": "^12.10.0",

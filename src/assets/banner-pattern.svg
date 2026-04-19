@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="120" height="120">
+  <defs>
+    <pattern id="weave" x="0" y="0" width="10" height="10" patternUnits="userSpaceOnUse">
+      <rect width="10" height="10" fill="#0d1226"/>
+      <path d="M0 10 L10 0" stroke="#c99a3c" stroke-width="0.4" opacity="0.12"/>
+    </pattern>
+  </defs>
+  <rect width="120" height="120" fill="url(#weave)"/>
+  <!-- Fleur-de-lis-ish ornaments at corners -->
+  <g stroke="#c99a3c" stroke-width="0.8" fill="none" opacity="0.25">
+    <path d="M10 10 L20 10 M10 10 L10 20"/>
+    <path d="M110 10 L100 10 M110 10 L110 20"/>
+    <path d="M10 110 L20 110 M10 110 L10 100"/>
+    <path d="M110 110 L100 110 M110 110 L110 100"/>
+  </g>
+  <!-- Central small banner motif -->
+  <g transform="translate(60 60)" fill="#c99a3c" opacity="0.18">
+    <path d="M-8 -10 L8 -10 L5 0 L8 10 L-8 10 L-5 0 Z"/>
+  </g>
+</svg>
