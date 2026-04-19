@@ -19,6 +19,7 @@
 .card:hover:not(.face-down) {
     transform: translateY(-4px) scale(1.05);
     box-shadow: 0 10px 15px rgba(0, 0, 0, 0.4), 0 0 15px rgba(255,255,255,0.1);
+    z-index: 100;
 }
 
 .card.selected {
@@ -72,15 +73,25 @@
 }
 
 .tactical-name {
-    font-size: 0.65rem;
+    font-size: 0.78rem;
+    font-family: 'Cinzel', Georgia, serif;
+    font-weight: 700;
     text-align: center;
-    word-break: break-word;
-    text-transform: uppercase;
+    word-break: keep-all;
+    white-space: nowrap;
     letter-spacing: 1px;
-    background: rgba(0,0,0,0.5);
-    padding: 2px 4px;
+    color: var(--gold-light, #f4d27a);
+    background: rgba(0,0,0,0.55);
+    padding: 3px 6px;
     border-radius: 4px;
+    max-width: calc(100% - 4px);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    line-height: 1.1;
 }
+/* 小さい盤面ではさらに縮小 */
+@media (max-width: 860px) { .tactical-name { font-size: 0.7rem; padding: 2px 4px; } }
+@media (max-width: 560px) { .tactical-name { font-size: 0.6rem; padding: 1px 3px; letter-spacing: 0.5px; } }
 
 .card-bottom {
     text-align: right;

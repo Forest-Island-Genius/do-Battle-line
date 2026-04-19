@@ -124,7 +124,7 @@
     flex-direction: column;
     padding: 1rem;
     position: relative;
-    overflow: hidden;
+    overflow: visible;
 }
 
 /* Player Areas */
@@ -471,7 +471,7 @@
     flex-direction: column;
     padding: 1rem;
     position: relative;
-    overflow: hidden;
+    overflow: visible;
 }
 
 /* Player Areas */
