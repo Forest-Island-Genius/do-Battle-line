@@ -58,21 +58,17 @@ function getCombinations(arr, k) {
  */
 function getBestPossibleEvaluation(currentCards, remainingPool, requiredSize = 3) {
     let needed = requiredSize - currentCards.length;
-    if (needed === 0) return evaluateCards(currentCards);
+    let isMud = requiredSize === 4;
+    if (needed === 0) return evaluateCards(currentCards, isMud);
     if (needed < 0) return { rank: 0, sum: 0 };
-    
-    // Theoretical max search. 
-    // We ignore tactical cards here as per user request.
-    let bestEval = { rank: 0, sum: 0 };
 
-    // Heuristic: If we need cards, we only consider the best possible cards in the pool.
-    // However, to be mathematically certain, we should check combinations.
-    // If pool is very large (e.g. 50 cards), 50C3 is fine.
+    let bestEval = { rank: 0, sum: 0 };
     let possibleCompletions = getCombinations(remainingPool, needed);
-    
+
     for (let extraCards of possibleCompletions) {
         let testHand = [...currentCards, ...extraCards];
-        let currentEval = evaluateCards(testHand);
+        let currentEval = evaluateCards(testHand, isMud);
+        if (!currentEval) continue;
         if (currentEval.rank > bestEval.rank || (currentEval.rank === bestEval.rank && currentEval.sum > bestEval.sum)) {
             bestEval = currentEval;
         }
@@ -93,10 +89,12 @@ export function checkAutoClaimForFlag(flag, allFlags) {
     const p1Full = flag.p1Cards.length === requiredSize;
     const p2Full = flag.p2Cards.length === requiredSize;
 
+    const isMud = flag.weatherCard === 't_mud';
+
     // Both full: immediate evaluation
     if (p1Full && p2Full) {
-        const p1Eval = evaluateCards(flag.p1Cards);
-        const p2Eval = evaluateCards(flag.p2Cards);
+        const p1Eval = evaluateCards(flag.p1Cards, isMud);
+        const p2Eval = evaluateCards(flag.p2Cards, isMud);
         
         if (isFog) {
             if (p1Eval.sum > p2Eval.sum) return 'P1';
@@ -118,7 +116,7 @@ export function checkAutoClaimForFlag(flag, allFlags) {
     const unknownPool = getRemainingTroopPool(visibleOnBoard);
 
     if (p1Full) {
-        const p1Eval = evaluateCards(flag.p1Cards);
+        const p1Eval = evaluateCards(flag.p1Cards, isMud);
         // Can P2 ever beat this p1Eval given current board and unknown pool?
         const bestP2Possible = getBestPossibleEvaluation(flag.p2Cards, unknownPool, requiredSize);
         
@@ -132,7 +130,7 @@ export function checkAutoClaimForFlag(flag, allFlags) {
     } 
     
     if (p2Full) {
-        const p2Eval = evaluateCards(flag.p2Cards);
+        const p2Eval = evaluateCards(flag.p2Cards, isMud);
         // Can P1 ever beat this p2Eval?
         const bestP1Possible = getBestPossibleEvaluation(flag.p1Cards, unknownPool, requiredSize);
         

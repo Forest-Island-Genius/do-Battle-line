@@ -38,7 +38,11 @@ export function createTroopDeck() {
 }
 
 export function createTacticalDeck() {
-    let deck = TACTICAL_CARDS.map(card => ({ ...card, isTactical: true }));
+    // MVP: Weather と Morale のみ採用。Guile (Scout/Redeploy/Deserter/Traitor) は
+    // マルチステップの対象選択 UI が未実装のため一旦デッキから除外する。
+    let deck = TACTICAL_CARDS
+        .filter(card => card.type !== TACTICAL_TYPES.GUILE)
+        .map(card => ({ ...card, isTactical: true }));
     return shuffle(deck);
 }
 

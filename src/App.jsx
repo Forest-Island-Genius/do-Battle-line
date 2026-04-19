@@ -38,6 +38,14 @@ function App() {
     const [pendingCardPlay, setPendingCardPlay] = useState(null);
     const [pendingDraw, setPendingDraw]         = useState(null);
 
+    // 操作が拒否された時の一時的フィードバック
+    const [playError, setPlayError] = useState(null);
+    useEffect(() => {
+        if (!playError) return;
+        const id = setTimeout(() => setPlayError(null), 2500);
+        return () => clearTimeout(id);
+    }, [playError]);
+
     // ---- Auto-join logic if room is in URL but player isn't ----
     useEffect(() => {
         if (roomId && !playerRole) {
@@ -134,6 +142,22 @@ function App() {
         const card = hand[selectedCardIdx];
         if (!card) return;
 
+        // 戦術カード累計差のルール (自分が相手を上回っている時は使用不可)
+        if (card.isTactical) {
+            const mePlayed = myRole === 'P1' ? activeState.p1.tacticalPlayed : activeState.p2.tacticalPlayed;
+            const oppPlayed = myRole === 'P1' ? activeState.p2.tacticalPlayed : activeState.p1.tacticalPlayed;
+            if (mePlayed > oppPlayed) {
+                setPlayError('戦術カードはこれ以上プレイできません (相手より多く使用済)');
+                return;
+            }
+        }
+        // 天候カードは1フラッグ1枚のみ
+        const targetFlag = activeState.flags[flagIdx];
+        if (card.isTactical && card.type === 'WEATHER' && targetFlag.weatherCard) {
+            setPlayError('このフラッグには既に天候カードが設置されています');
+            return;
+        }
+
         const cardName = card.isTactical
             ? `戦術カード「${card.name || card.id}」`
             : `${card.color} ${card.value}`;
@@ -202,6 +226,9 @@ function App() {
 
     return (
         <div className="app-container">
+            {playError && (
+                <div className="play-error-toast">{playError}</div>
+            )}
             {/* 確認モーダル: カード配置 */}
             {pendingCardPlay && (
                 <ConfirmModal
