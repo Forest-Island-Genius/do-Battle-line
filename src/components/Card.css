@@ -1,7 +1,7 @@
 /* Card.css */
 .card {
-    width: 60px;
-    height: 90px;
+    width: var(--card-w, 60px);
+    height: var(--card-h, 90px);
     border-radius: 8px;
     display: flex;
     flex-direction: column;

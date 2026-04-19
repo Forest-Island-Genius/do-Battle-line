@@ -43,7 +43,10 @@
     display: flex;
     align-items: center;
     gap: 0.5rem;
+    white-space: nowrap;
+    flex-wrap: wrap;
 }
+.room-info > * { white-space: nowrap; }
 
 .room-code {
     font-weight: 700;
@@ -67,6 +70,7 @@
     padding: 0.4rem 1rem;
     border-radius: 999px;
     background: rgba(255, 255, 255, 0.08);
+    white-space: nowrap;
 }
 
 .status-msg {
@@ -116,7 +120,7 @@
 
 /* Player Areas */
 .player-area {
-    flex: 0 0 160px;
+    flex: 0 0 var(--player-area-h, 160px);
     display: flex;
     justify-content: center;
     transition: all 0.3s ease;
