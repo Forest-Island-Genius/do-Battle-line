@@ -3,136 +3,119 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: space-between;
+    justify-content: center;
     height: 100%;
     width: var(--flag-w, 60px);
     position: relative;
     cursor: pointer;
     transition: background 0.2s;
     border-radius: 12px;
-    padding: 10px 0;
+    padding: 8px 0;
+    gap: 6px;
 }
 
 .flag-column:hover {
-    background: rgba(255, 255, 255, 0.03);
+    background: rgba(244, 210, 122, 0.04);
 }
 
 .flag-cards {
     display: flex;
     flex-direction: column;
-    gap: -30px; /* Stack them tightly vertically */
-    height: var(--formation-h, 150px);
+    min-height: calc(var(--card-h, 90px) * 0.65);
 }
 
-.top-cards {
-    justify-content: flex-end; /* Cards grow downwards towards the flag */
-}
-
-.bottom-cards {
-    justify-content: flex-start; /* Cards grow upwards towards the flag */
-}
+.top-cards    { justify-content: flex-end; }
+.bottom-cards { justify-content: flex-start; }
 
 .flag-card-slot {
-    margin-bottom: -40px; /* negative margin to overlap */
+    margin-bottom: -40px;
     transition: transform 0.2s;
     z-index: 1;
 }
 
-.bottom-cards .flag-card-slot:nth-child(1) { z-index: 1; }
-.bottom-cards .flag-card-slot:nth-child(2) { z-index: 2; margin-top: -30px; }
-.bottom-cards .flag-card-slot:nth-child(3) { z-index: 3; margin-top: -30px; }
-.bottom-cards .flag-card-slot:nth-child(4) { z-index: 4; margin-top: -30px; }
+.bottom-cards .flag-card-slot:nth-child(n+2) { margin-top: -30px; }
+.bottom-cards .flag-card-slot:nth-child(2) { z-index: 2; }
+.bottom-cards .flag-card-slot:nth-child(3) { z-index: 3; }
+.bottom-cards .flag-card-slot:nth-child(4) { z-index: 4; }
 
-.top-cards .flag-card-slot {
-   transform: rotate(180deg); /* P2 cards face P2 */
-}
-.top-cards .flag-card-slot:nth-child(1) { z-index: 1; }
-.top-cards .flag-card-slot:nth-child(2) { z-index: 2; margin-bottom: -30px; }
-.top-cards .flag-card-slot:nth-child(3) { z-index: 3; margin-bottom: -30px; }
-.top-cards .flag-card-slot:nth-child(4) { z-index: 4; margin-bottom: -30px; }
+.top-cards .flag-card-slot { transform: rotate(180deg); }
+.top-cards .flag-card-slot:nth-child(n+2) { margin-bottom: -30px; }
+.top-cards .flag-card-slot:nth-child(2) { z-index: 2; }
+.top-cards .flag-card-slot:nth-child(3) { z-index: 3; }
+.top-cards .flag-card-slot:nth-child(4) { z-index: 4; }
 
-
+/* ── ヘラルドリック盾トークン (heater shield 型) ── */
 .flag-token {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    background: #e2e8f0;
-    color: #0f172a;
+    width: 46px;
+    height: 54px;
     display: flex;
     align-items: center;
     justify-content: center;
     font-weight: 800;
-    font-size: 1.2rem;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.5), inset 0 2px 4px rgba(255,255,255,0.8);
+    font-family: 'Cinzel', Georgia, serif;
+    font-size: 1rem;
+    letter-spacing: 1px;
     position: relative;
     z-index: 10;
-    border: 2px solid #94a3b8;
-    margin: 20px 0;
+    margin: 6px 0;
     transition: all 0.3s;
+    color: var(--gold-light, #f4d27a);
+    /* 金のアウトラインを本体として表現し、内側は疑似要素で描く */
+    background: linear-gradient(180deg, #f4d27a, #c99a3c 55%, #7a5918);
+    clip-path: polygon(0% 0%, 100% 0%, 100% 58%, 85% 82%, 50% 100%, 15% 82%, 0% 58%);
+    filter: drop-shadow(0 3px 6px rgba(0,0,0,0.5));
 }
 
-.flag-token.unclaimed {
-    background: radial-gradient(circle at 30% 30%, #475569, #1e293b);
-    color: #94a3b8;
-    border-color: #334155;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.6);
-}
-
-.flag-token.won-bottom {
-    background: radial-gradient(circle at 30% 30%, #60a5fa, #1e3a8a);
-    color: white;
-    border-color: #3b82f6;
-    box-shadow: 0 0 15px rgba(59, 130, 246, 0.5);
-    transform: translateY(20px); /* Move towards winner visually */
-}
-
-.flag-token.won-top {
-    background: radial-gradient(circle at 30% 30%, #ef4444, #991b1b);
-    color: white;
-    border-color: #ef4444;
-    box-shadow: 0 0 15px rgba(239, 68, 68, 0.5);
-    transform: translateY(-20px);
-}
-
-
-
-.flag-actions {
+.flag-token::before {
+    content: "";
     position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    opacity: 0;
-    transition: opacity 0.2s;
-    width: max-content;
+    inset: 2px;
+    clip-path: polygon(0% 0%, 100% 0%, 100% 58%, 85% 82%, 50% 100%, 15% 82%, 0% 58%);
+    background: radial-gradient(ellipse at 30% 25%, #3b4773, #0c1330 75%);
+    z-index: -1;
 }
 
-.flag-column:hover .flag-actions {
-    opacity: 1;
+.flag-token-label {
+    position: relative;
+    z-index: 1;
+    line-height: 1;
+    text-shadow: 0 1px 2px rgba(0,0,0,0.6);
+    padding-bottom: 6px; /* 盾下部の尖り分、視覚中心を少し上に */
 }
 
-.claim-btn {
-    background: var(--accent-color);
-    color: white;
-    border: none;
-    padding: 4px 8px;
-    border-radius: 4px;
-    font-size: 0.7rem;
-    font-weight: bold;
-    cursor: pointer;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.5);
+.flag-token.won-bottom::before {
+    background: radial-gradient(ellipse at 30% 25%, #4272d8, #0e1d5a 75%);
 }
-.claim-btn:hover { background: var(--accent-hover); }
+.flag-token.won-bottom {
+    background: linear-gradient(180deg, #f4d27a, #c99a3c 55%, #7a5918);
+    animation: claimPulse 2s ease-in-out;
+}
 
+.flag-token.won-top::before {
+    background: radial-gradient(ellipse at 30% 25%, #d63a50, #5c0a15 75%);
+}
+.flag-token.won-top {
+    background: linear-gradient(180deg, #f4d27a, #c99a3c 55%, #7a5918);
+    animation: claimPulse 2s ease-in-out;
+}
+
+@keyframes claimPulse {
+    0%   { filter: drop-shadow(0 0 0 rgba(244, 210, 122, 0)); }
+    50%  { filter: drop-shadow(0 0 14px rgba(244, 210, 122, 0.8)); }
+    100% { filter: drop-shadow(0 3px 6px rgba(0, 0, 0, 0.5)); }
+}
+
+/* ── 天候バッジ ── */
 .weather-mod {
     position: absolute;
+    top: calc(100% + 2px);
     left: 50%;
-    top: calc(100% + 4px);
     transform: translateX(-50%);
     background: linear-gradient(180deg, rgba(15, 20, 40, 0.95), rgba(10, 13, 31, 0.95));
     color: var(--gold-light, #f4d27a);
-    font-size: 0.6rem;
+    font-size: 0.58rem;
     padding: 2px 6px;
-    border-radius: 4px;
+    border-radius: 3px;
     letter-spacing: 2px;
     font-family: 'Cinzel', Georgia, serif;
     font-weight: 700;
@@ -143,7 +126,7 @@
     pointer-events: none;
 }
 
-/* Guile 目的地候補 */
+/* Guile ハイライト */
 .flag-destination-hl {
     background: rgba(211, 168, 74, 0.08);
     outline: 1px dashed rgba(211, 168, 74, 0.5);
@@ -154,13 +137,19 @@
     50%      { outline-color: rgba(244, 210, 122, 0.85); }
 }
 
-/* Guile ターゲット可能カード */
-.slot-targetable {
-    cursor: crosshair;
-}
+.slot-targetable { cursor: crosshair; }
 .slot-targetable .card {
     box-shadow: 0 0 0 2px var(--gold, #c99a3c), 0 0 18px rgba(244, 210, 122, 0.55);
 }
 .slot-targetable:hover .card {
     transform: translateY(-4px) scale(1.08);
+}
+
+/* 盾トークンのサイズを狭い盤面で縮小 */
+@media (max-width: 860px) {
+    .flag-token { width: 40px; height: 48px; font-size: 0.85rem; }
+}
+@media (max-width: 560px) {
+    .flag-token { width: 34px; height: 42px; font-size: 0.7rem; }
+    .weather-mod { font-size: 0.5rem; padding: 1px 4px; }
 }

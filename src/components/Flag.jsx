@@ -2,15 +2,8 @@ import React from 'react';
 import { Card } from './Card';
 import './Flag.css';
 
-/**
- * Props:
- *  flag
- *  onFlagClick()                 フラッグ全体クリック (通常プレイ時のカード配置確定 or Guile 目的地)
- *  onCardClick(side, cardIdx)    フラッグ上の既存カードクリック (Guile で対象選択)
- *  targetable                    { own, opp } — どちら側のカードが選択可能か
- *  destinationHighlight          boolean — 目的地としてハイライト
- *  myRole                        'P1' | 'P2'
- */
+const ROMAN = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX'];
+
 export function Flag({ flag, onFlagClick, onCardClick, targetable, destinationHighlight, myRole }) {
     const isP1 = myRole === 'P1';
     const bottomCards = (isP1 ? flag.p1Cards : flag.p2Cards) || [];
@@ -40,6 +33,10 @@ export function Flag({ flag, onFlagClick, onCardClick, targetable, destinationHi
         onCardClick(side, idx);
     };
 
+    const tokenLabel = flag.claimedBy
+        ? (flag.claimedBy === 'P1' ? '◆' : '◆')
+        : ROMAN[flag.index];
+
     return (
         <div className={columnClass} onClick={onFlagClick}>
             <div className="flag-cards top-cards">
@@ -55,7 +52,7 @@ export function Flag({ flag, onFlagClick, onCardClick, targetable, destinationHi
             </div>
 
             <div className={`flag-token ${captureClass}`}>
-                {flag.claimedBy ? flag.claimedBy : flag.index + 1}
+                <span className="flag-token-label">{tokenLabel}</span>
                 {flag.weatherCard && (
                     <div className="weather-mod">
                         {flag.weatherCard === 't_mud' ? '泥濘' : '霧'}

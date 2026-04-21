@@ -10,6 +10,27 @@ import { syncGameState, listenToGameState, createRoom } from './firebase';
 import emblemUrl from './assets/emblem.svg';
 import './App.css';
 
+// ---- 獲得フラッグ数のスコア表示 ----
+function FlagScore({ flags, myRole }) {
+    const opp = myRole === 'P1' ? 'P2' : 'P1';
+    const pip = (owner) => {
+        if (!owner) return '';
+        return owner === myRole ? 'won-self' : 'won-opp';
+    };
+    const mineCount = flags.filter(f => f.claimedBy === myRole).length;
+    const oppCount  = flags.filter(f => f.claimedBy === opp).length;
+    return (
+        <span className="flag-score" title={`自軍 ${mineCount} / 敵軍 ${oppCount}`}>
+            <span className="flag-score-label">{mineCount}-{oppCount}</span>
+            <span className="flag-score-pips">
+                {flags.map((f, i) => (
+                    <span key={i} className={`flag-score-pip ${pip(f.claimedBy)}`} />
+                ))}
+            </span>
+        </span>
+    );
+}
+
 // ---- 確認モーダル ----
 function ConfirmModal({ message, detail, onConfirm, onCancel }) {
     return (
@@ -357,6 +378,7 @@ function App() {
                     <div className="room-info">
                         ルームコード: <span className="room-code">{roomId}</span>
                         <span className="player-role-badge">{myRole}</span>
+                        <FlagScore flags={activeState.flags} myRole={myRole} />
                         <button className={`copy-invite-btn ${copyStatus}`} onClick={handleCopyInvite}>
                             {copyStatus === 'invite' ? '招待リンクをコピー' : 'コピー完了'}
                         </button>

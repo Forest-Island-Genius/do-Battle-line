@@ -21,9 +21,9 @@
 
 .cards-row {
     display: flex;
-    gap: -20px; /* Overlap cards slightly */
     justify-content: center;
-    padding: 10px;
+    padding: 10px 30px; /* 回転のはみ出し分の余白 */
+    overflow: visible;
 }
 
 .hand-card-wrapper {
@@ -35,14 +35,15 @@
     margin-left: 0;
 }
 
-/* Fan out effect slightly */
-.hand-card-wrapper:nth-child(1) { transform: rotate(-6deg) translateY(4px); }
-.hand-card-wrapper:nth-child(2) { transform: rotate(-4deg) translateY(2px); }
-.hand-card-wrapper:nth-child(3) { transform: rotate(-2deg); }
+/* 扇形展開 (角度を控えめにして右端切れ防止) */
+.hand-card-wrapper:nth-child(1) { transform: rotate(-4deg) translateY(3px); }
+.hand-card-wrapper:nth-child(2) { transform: rotate(-2.5deg) translateY(1px); }
+.hand-card-wrapper:nth-child(3) { transform: rotate(-1deg); }
 .hand-card-wrapper:nth-child(4) { transform: rotate(0deg) translateY(-2px); z-index: 10; }
-.hand-card-wrapper:nth-child(5) { transform: rotate(2deg); }
-.hand-card-wrapper:nth-child(6) { transform: rotate(4deg) translateY(2px); }
-.hand-card-wrapper:nth-child(7) { transform: rotate(6deg) translateY(4px); }
+.hand-card-wrapper:nth-child(5) { transform: rotate(1deg); }
+.hand-card-wrapper:nth-child(6) { transform: rotate(2.5deg) translateY(1px); }
+.hand-card-wrapper:nth-child(7) { transform: rotate(4deg) translateY(3px); }
+.hand-card-wrapper:nth-child(n+8) { transform: rotate(5deg) translateY(4px); }
 
 .hand-card-wrapper:hover {
     transform: translateY(-15px) rotate(0) scale(1.1);

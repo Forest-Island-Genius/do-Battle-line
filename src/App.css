@@ -64,14 +64,43 @@
 }
 
 .player-role-badge {
-    background: rgba(167, 139, 250, 0.2);
-    border: 1px solid rgba(167, 139, 250, 0.4);
-    color: #c4b5fd;
+    background: rgba(194, 36, 56, 0.18);
+    border: 1px solid var(--gold, #c99a3c);
+    color: var(--gold-light, #f4d27a);
     border-radius: 4px;
     padding: 1px 6px;
     font-size: 0.75rem;
     font-weight: 700;
+    font-family: 'Cinzel', Georgia, serif;
 }
+
+/* 獲得フラッグ数のスコア表示 */
+.flag-score {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-family: 'Cinzel', Georgia, serif;
+    font-size: 0.72rem;
+    letter-spacing: 1.5px;
+    color: var(--gold-light, #f4d27a);
+    padding: 2px 8px;
+    border: 1px solid rgba(201, 154, 60, 0.35);
+    border-radius: 4px;
+    background: rgba(10, 13, 31, 0.55);
+}
+.flag-score .flag-score-label { opacity: 0.7; }
+.flag-score .flag-score-pips {
+    display: inline-flex;
+    gap: 3px;
+}
+.flag-score-pip {
+    width: 8px;
+    height: 10px;
+    background: rgba(244, 210, 122, 0.18);
+    clip-path: polygon(0% 0%, 100% 0%, 100% 58%, 85% 82%, 50% 100%, 15% 82%, 0% 58%);
+}
+.flag-score-pip.won-self { background: linear-gradient(180deg, #f4d27a, #7a5918); }
+.flag-score-pip.won-opp  { background: linear-gradient(180deg, #d63a50, #5c0a15); }
 
 .status-indicator {
     font-size: 1rem;
@@ -154,11 +183,17 @@
 }
 
 .top-player-area {
-    transform: rotate(180deg); /* 相手側の手札を180度回転 */
+    transform: rotate(180deg); /* 相手側の手札を180度回転して内向きに扇を展開 */
+}
+/* ラベルだけ逆回転して普通に読めるようにする */
+.top-player-area .player-label {
+    transform: rotate(180deg);
+    color: var(--text-secondary, #94a3b8);
+    opacity: 0.85;
 }
 
 .bottom-player-area {
-    transform: rotate(0deg);  /* 自分側の手札は回転させない */
+    transform: rotate(0deg);
 }
 
 
