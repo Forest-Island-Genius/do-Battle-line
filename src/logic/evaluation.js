@@ -31,7 +31,7 @@ export function evaluateCards(cards, isMud = false) {
 
     function search(index, current) {
         if (index === wilds.length) {
-            const res = evaluateConcrete(current, isMud);
+            const res = evaluateConcrete(current);
             if (!res) return;
             if (res.rank > bestEval.rank || (res.rank === bestEval.rank && res.sum > bestEval.sum)) {
                 bestEval = res;
@@ -43,13 +43,13 @@ export function evaluateCards(cards, isMud = false) {
         }
     }
 
-    if (wilds.length === 0) return evaluateConcrete(cards, isMud);
+    if (wilds.length === 0) return evaluateConcrete(cards);
 
     search(0, nonWilds);
     return bestEval;
 }
 
-function evaluateConcrete(cards, isMud) {
+function evaluateConcrete(cards) {
     const values = cards.map(c => c.value).sort((a, b) => a - b);
     const colors = cards.map(c => c.color);
     const sum    = values.reduce((a, b) => a + b, 0);

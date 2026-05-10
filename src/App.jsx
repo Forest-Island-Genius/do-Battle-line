@@ -217,9 +217,14 @@ function App() {
     const commitCardPlay = () => {
         if (!pendingCardPlay) return;
         const newState = g.playCard(activeState, myRole, pendingCardPlay.cardIdx, pendingCardPlay.flagIdx);
-        applyAndSync(newState);
+        // ローカル React state は sync 前にクリアする (sync が万が一 throw してもモーダルが残らない)
         setSelectedCardIdx(null);
         setPendingCardPlay(null);
+        if (!newState) {
+            setPlayError('配置に失敗しました。場の状況が変わっている可能性があります。');
+            return;
+        }
+        applyAndSync(newState);
     };
 
     const cancelCardPlay = () => setPendingCardPlay(null);
@@ -233,8 +238,12 @@ function App() {
     const commitDraw = () => {
         if (!pendingDraw) return;
         const ns = g.runDraw(activeState, myRole, pendingDraw.deckType);
-        applyAndSync(ns);
         setPendingDraw(null);
+        if (!ns) {
+            setPlayError('ドローに失敗しました。');
+            return;
+        }
+        applyAndSync(ns);
     };
     const cancelDraw = () => setPendingDraw(null);
 

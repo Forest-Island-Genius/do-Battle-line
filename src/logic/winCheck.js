@@ -1,5 +1,4 @@
-import { GAME_STATUS } from './game';
-import { TACTICAL_TYPES } from './deck';
+// Battle Line 公式の勝利判定: 5 旗獲得 OR 3 連続旗獲得。
 
 export function checkWinCondition(flags) {
     let p1Wins = 0;
@@ -30,14 +29,3 @@ export function checkWinCondition(flags) {
     if (p2Wins >= 5 || maxP2Consecutive >= 3) return 'P2';
     return null;
 }
-
-export function playCardReducer(state, action) {
-    // Basic structural reducer for playing a card
-    // action: { type: 'PLAY_CARD', payload: { player: 'P1', card: {}, flagIndex: 0 } }
-    
-    // In actual implementation, we'd handle the very complex tactical card states here.
-    return { ...state };
-}
-
-// To manage the complexities, we'll build a hook in App.jsx that holds the main state 
-// and exposes simple dispatch methods for UI interactions (Play Card on Flag X, Draw from Y, etc).
